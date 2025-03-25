@@ -1,14 +1,11 @@
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE 
+import os
+import win32com.client
+from CrearImagenes import powerpoint_to_images
 
 
-# Definir la ubicación específica para eliminar la tabla
-ubicacion_deseada = {
-    'left': 3391,  # Reemplaza con el valor deseado en EMUs (1 punto = 12700 EMUs)
-    'top': -27384,   # Reemplaza con el valor deseado en EMUs
-    'width': 9140610, # Reemplaza con el valor deseado en EMUs
-    'height': 655320 # Reemplaza con el valor deseado en EMUs
-}
+
 
 # Definir las dimensiones específicas para eliminar la imagen
 dimensiones_deseadas = {
@@ -18,6 +15,9 @@ dimensiones_deseadas = {
 
 
 def quitarElementos(archivo_pptx):
+
+    eliminar_diapositivas(os.path.abspath(archivo_pptx))
+
     # Cargar la presentación
     if archivo_pptx:
         presentation = Presentation(archivo_pptx)
@@ -28,21 +28,7 @@ def quitarElementos(archivo_pptx):
         for slide in presentation.slides:
             # Identificar cuadros de texto para eliminar
             for shape in slide.shapes:
-                if shape.has_table:
-                    # Obtener la posición y dimensiones de la tabla
-                    left = shape.left
-                    top = shape.top
-                    width = shape.width
-                    height = shape.height
-                    
-                    # Verificar si la tabla está en la ubicación deseada
-                    if ((left == ubicacion_deseada['left'] and
-                        top == ubicacion_deseada['top'] and
-                        width == ubicacion_deseada['width'] and
-                        height == ubicacion_deseada['height'])or(shape.table.cell(0, 0).text == "IMAGEN")):
-                        sp = shape
-                        sp._element.getparent().remove(sp._element)
-                        
+
                 if shape.shape_type == 13:  # 13 indica una imagen
                     # Obtener las dimensiones de la imagen
                     width = shape.width
@@ -60,9 +46,38 @@ def quitarElementos(archivo_pptx):
                         if any(palabra in texto for palabra in palabras_clave):
                             sp = shape
                             sp._element.getparent().remove(sp._element) 
-
+                
         # Guardar los cambios en el mismo archivo
         presentation.save(archivo_pptx)
         print("Tablas y elementos eliminados. Archivo guardado.")
     else:
         print("No se seleccionó ningún archivo.")
+
+def eliminar_diapositivas(archivo_pptx):
+    # Crear instancia de PowerPoint
+    powerpoint = win32com.client.Dispatch("PowerPoint.Application")
+    
+    # Abrir la presentación en modo de solo lectura
+    presentation = powerpoint.Presentations.Open(archivo_pptx, WithWindow=False)
+
+    #Total de diapositivas
+    totalDiapositivas = presentation.Slides.count
+
+    #Eliminar ultima diapositiva
+    presentation.Slides(totalDiapositivas).Delete()
+    
+    #Eliminar primeras 4 diapostivas
+    diapositivas_a_eliminar = [1, 2, 3, 4]
+    for indice in sorted(diapositivas_a_eliminar, reverse=True):
+        presentation.Slides(indice).Delete()
+
+    # Guarda la presentación
+    presentation.SaveAs(archivo_pptx)
+
+    # Cierra la presentación
+    presentation.Close()
+
+    # Cierra PowerPoint
+    powerpoint.Quit()
+
+

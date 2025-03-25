@@ -4,16 +4,16 @@ import os
 
 
 
-def recortar_bordes_blancos(imagen_ruta, porcentaje):
+def recortar_borde_arriba(imagen_ruta):
     # Abrir la imagen
     imagen = Image.open(imagen_ruta)
     ancho, alto = imagen.size
 
     # Calcular la altura del recorte
-    altura_recorte = int(alto * porcentaje)
+    altura_recorte_superior = int(alto * 0.095)
 
     # Definir el área de recorte
-    area_recorte = (0, altura_recorte, ancho, alto)  # (left, top, right, bottom)
+    area_recorte = (0, altura_recorte_superior, ancho, alto)  # (left, top, right, bottom)
 
     # Recortar la imagen
     imagen_recortada = imagen.crop(area_recorte)
@@ -21,16 +21,19 @@ def recortar_bordes_blancos(imagen_ruta, porcentaje):
     # Guardar la imagen recortada
     imagen_recortada.save(imagen_ruta)
 
-def recortar_bordes_debajo(imagen_ruta, porcentaje):
+def recortar_borde_ambos(imagen_ruta):
     # Abrir la imagen
     imagen = Image.open(imagen_ruta)
     ancho, alto = imagen.size
 
     # Calcular la altura del recorte
-    altura_recorte = int(alto * porcentaje)
+    altura_recorte = int(alto * 0.175)
+
+    # Calcular la altura del recorte
+    altura_recorte_superior = int(alto * 0.095)
 
     # Definir el área de recorte
-    area_recorte = (0, 0, ancho, alto - altura_recorte)  # (left, top, right, bottom)
+    area_recorte = (0, altura_recorte_superior, ancho, alto - altura_recorte)  # (left, top, right, bottom)
 
     # Recortar la imagen
     imagen_recortada = imagen.crop(area_recorte)
@@ -39,36 +42,18 @@ def recortar_bordes_debajo(imagen_ruta, porcentaje):
     imagen_recortada.save(imagen_ruta)
 
 
-# Solicitar al usuario que seleccione el directorio principal
-# Abrir el cuadro de diálogo para seleccionar varios archivos de imagen
-archivos_seleccionados = filedialog.askopenfilenames(
-    title="Selecciona imágenes",
-    filetypes=[
-        ("Archivos de Imagen", "*.png;*.jpg;*.jpeg;*"),
-        ("Todos los archivos", "*.*")  # Opción para todos los archivos si es necesario
-    ]
-)
+def recortar_bordes(ruta_imagenes, mapas):
+    imagenes = len(os.listdir(ruta_imagenes))
+    for i in range (1, imagenes+1):
+        if i <= mapas:
+            recortar_borde_arriba(ruta_imagenes+f"\{i}.jpg")
+        else:
+            recortar_borde_ambos(ruta_imagenes+f"\{i}.jpg")
 
-if not archivos_seleccionados:
-    print("No se ha seleccionado nada. Saliendo del programa.")
-else:
-    for archivo in archivos_seleccionados:
-        recortar_bordes_blancos(archivo, 0.09)
-    print("Proceso completado.")
 
-# Solicitar al usuario que seleccione el directorio principal
-# Abrir el cuadro de diálogo para seleccionar varios archivos de imagen
-archivos_seleccionados = filedialog.askopenfilenames(
-    title="Recortar debajo",
-    filetypes=[
-        ("Archivos de Imagen", "*.png;*.jpg;*.jpeg;*"),
-        ("Todos los archivos", "*.*")  # Opción para todos los archivos si es necesario
-    ]
-)
 
-if not archivos_seleccionados:
-    print("No se ha seleccionado nada. Saliendo del programa.")
-else:
-    for archivo in archivos_seleccionados:
-        recortar_bordes_debajo(archivo, 0.18)
-    print("Proceso completado.")
+    
+
+
+
+
