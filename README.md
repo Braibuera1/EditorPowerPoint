@@ -1,7 +1,7 @@
 [README.md](https://github.com/user-attachments/files/21689910/README.md)
-# 📄 Proyecto: Editor Automático de Presentaciones PowerPoint
+# PPTX-EDITOR: Editor Automático de Presentaciones PowerPoint 
 
-Este proyecto automatiza el proceso de edición y exportación de presentaciones PowerPoint (`.pptx`) utilizadas en informes o reportes con mapas y observaciones.
+Este proyecto automatiza el proceso de edición y exportación de presentaciones PowerPoint (`.pptx`) utilizadas en informes de investigación delictiva para la automatización en tareas repetitivas.
 
 ## 🧠 Funcionalidades principales
 
@@ -17,11 +17,13 @@ Este proyecto automatiza el proceso de edición y exportación de presentaciones
 ```
 .
 ├── main.py
+├── requirements.txt
 ├── utils/
 │   ├── EditorPPTX.py
 │   ├── funcionesImagenes.py
 │   ├── seleccionar.py
-```
+├── data/
+|   ├──rutas.py
 
 ## ⚙️ ¿Cómo funciona?
 
@@ -29,10 +31,10 @@ Este proyecto automatiza el proceso de edición y exportación de presentaciones
 2. Se solicita al usuario seleccionar un archivo `.pptx`.
 3. Se procesa el archivo mediante `EditorPPTX`, que:
    - Elimina las primeras 4 diapositivas.
-   - Elimina las diapositivas finales según la cantidad de mapas.
+   - Elimina las diapositivas finales según la cantidad de diapostivas innecesarias.
    - Elimina íconos de video y flechas específicas.
-   - Exporta las diapositivas restantes como imágenes.
-4. Las imágenes exportadas son procesadas con `Pillow`, recortando bordes superiores o ambos, según correspondan.
+   - Exporta las diapositivas restantes como imágenes en un orden especifico (mapas al final en orden ascendente).
+4. Las imágenes exportadas son procesadas con `Pillow`, recortando bordes superiores o ambos, según correspondan (si es un mapa o imagen de videograbado).
 5. Las imágenes se guardan automáticamente en una carpeta generada a partir del texto de la primera diapositiva (por ejemplo: `CASO XXXX OBJ XXXX`).
 
 ## 🧩 Módulos
@@ -61,7 +63,7 @@ Este proyecto automatiza el proceso de edición y exportación de presentaciones
 ## 🖥️ Requisitos
 
 - Python 
-- [pywin32](https://pypi.org/project/pywin32/)
+- pywin32 
 - Pillow
 
 Instalación recomendada:
