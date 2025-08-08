@@ -24,7 +24,7 @@ Este proyecto automatiza el proceso de edición y exportación de presentaciones
 │   ├── seleccionar.py
 ├── data/
 |   ├──rutas.py
-
+```
 ## ⚙️ ¿Cómo funciona?
 
 1. Se ejecuta el archivo `main.py`.
