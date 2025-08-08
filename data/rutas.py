@@ -1,2 +1,3 @@
 
-RUTA_DESTINO = r"C:\\Users\\u58667\\Desktop\\OBJETIVOS"
+RUTA_DESTINO = r"[Ruta donde se guardaran los directorios]"
+
